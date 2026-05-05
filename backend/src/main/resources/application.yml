@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: cinestack-api
+  datasource:
+    url: jdbc:h2:mem:cinestack;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    secret: "change-me-change-me-change-me-change-me-change-me-change-me"
+    expiration-minutes: 120
+  cors:
+    allowed-origins: "http://localhost:*,http://127.0.0.1:*"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

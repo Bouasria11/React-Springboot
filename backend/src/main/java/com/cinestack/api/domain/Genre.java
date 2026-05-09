@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "genres")
 public class Genre {
+    // Genre unique par nom pour normaliser le catalogue.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

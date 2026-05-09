@@ -18,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "movies")
 public class Movie {
+    // Entite principale du catalogue, reliee aux genres et aux avis.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +39,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
+    // Relation many-to-many pour qu'un film appartienne a plusieurs genres.
     private Set<Genre> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "movie")

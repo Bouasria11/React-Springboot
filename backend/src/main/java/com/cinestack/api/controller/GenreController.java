@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/genres")
 public class GenreController {
+    // Liste publique des genres, utilisee par les filtres et les formulaires.
     private final GenreRepository genres;
 
     public GenreController(GenreRepository genres) {
@@ -19,6 +20,7 @@ public class GenreController {
 
     @GetMapping
     List<GenreResponse> all() {
+        // Trie sans tenir compte de la casse pour un affichage stable.
         return genres.findAll().stream()
                 .sorted(Comparator.comparing(genre -> genre.getName().toLowerCase()))
                 .map(genre -> new GenreResponse(genre.getId(), genre.getName()))

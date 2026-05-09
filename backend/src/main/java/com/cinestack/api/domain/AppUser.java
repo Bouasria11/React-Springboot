@@ -18,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class AppUser {
+    // Compte applicatif utilise a la fois pour l'authentification et les avis.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +36,7 @@ public class AppUser {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
+    // Les roles sont charges avec l'utilisateur car Spring Security en a besoin immediatement.
     private Set<Role> roles = new HashSet<>();
 
     protected AppUser() {

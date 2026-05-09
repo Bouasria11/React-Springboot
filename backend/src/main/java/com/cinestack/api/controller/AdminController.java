@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+    // Toutes ces routes sont protegees par SecurityConfig avec le role ADMIN.
     private final AdminService adminService;
 
     public AdminController(AdminService adminService) {

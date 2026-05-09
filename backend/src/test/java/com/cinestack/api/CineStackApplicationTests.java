@@ -7,5 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class CineStackApplicationTests {
     @Test
     void contextLoads() {
+        // Verifie que le contexte Spring demarre avec la configuration actuelle.
     }
 }

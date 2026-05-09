@@ -21,6 +21,7 @@ public class DataInitializer {
     @Bean
     CommandLineRunner seed(UserRepository users, GenreRepository genres, MovieRepository movies, PasswordEncoder passwordEncoder) {
         return args -> {
+            // Donnees de demonstration chargees uniquement hors production.
             if (!users.existsByUsername("admin")) {
                 users.save(new AppUser("admin", "admin@cinestack.local", passwordEncoder.encode("admin12345"), Set.of(Role.ROLE_ADMIN, Role.ROLE_USER)));
             }
@@ -28,6 +29,7 @@ public class DataInitializer {
                 users.save(new AppUser("demo", "demo@cinestack.local", passwordEncoder.encode("demo12345"), Set.of(Role.ROLE_USER)));
             }
             if (movies.count() > 0) {
+                // Ne reseed pas si la base contient deja un catalogue.
                 return;
             }
 
@@ -42,6 +44,7 @@ public class DataInitializer {
     }
 
     private Movie movie(String title, String synopsis, LocalDate releaseDate, String posterUrl, String trailerUrl, Genre... genres) {
+        // Fabrique un film complet pour garder le seed lisible.
         Movie movie = new Movie();
         movie.setTitle(title);
         movie.setSynopsis(synopsis);

@@ -9,6 +9,7 @@ public final class MovieSpecifications {
     private MovieSpecifications() {
     }
 
+    // Chaque methode retourne une Specification neutre quand le filtre n'est pas fourni.
     public static Specification<Movie> titleContains(String title) {
         return (root, query, cb) -> title == null || title.isBlank()
                 ? cb.conjunction()
@@ -20,6 +21,7 @@ public final class MovieSpecifications {
             if (genre == null || genre.isBlank()) {
                 return cb.conjunction();
             }
+            // Le distinct evite les doublons provoques par la jointure many-to-many.
             query.distinct(true);
             return cb.equal(cb.lower(root.join("genres", JoinType.LEFT).get("name")), genre.toLowerCase());
         };

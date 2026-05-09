@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ReviewController {
+    // Regroupe les avis lies aux films et les recommandations personnalisees.
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
@@ -30,6 +31,7 @@ public class ReviewController {
 
     @PostMapping("/movies/{movieId}/reviews")
     ReviewResponse create(@PathVariable Long movieId, @Valid @RequestBody ReviewRequest request, Principal principal) {
+        // Principal vient du JWT valide par JwtAuthenticationFilter.
         return reviewService.create(movieId, principal.getName(), request);
     }
 

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
+    // Expose le catalogue public et les operations reservees aux administrateurs.
     private final MovieService movieService;
 
     public MovieController(MovieService movieService) {
@@ -35,6 +36,7 @@ public class MovieController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate releasedAfter,
             Pageable pageable
     ) {
+        // Les filtres restent optionnels pour servir aussi la page catalogue par defaut.
         return movieService.search(title, genre, releasedAfter, pageable);
     }
 

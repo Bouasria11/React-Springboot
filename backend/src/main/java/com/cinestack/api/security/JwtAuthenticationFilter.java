@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        // Les requetes sans Bearer token continuent vers les regles d'autorisation Spring Security.
         if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
@@ -37,12 +38,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 var userDetails = userDetailsService.loadUserByUsername(username);
                 if (jwtService.isValid(token, userDetails)) {
+                    // Injecte l'utilisateur authentifie pour les controleurs qui lisent Principal.
                     var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         } catch (RuntimeException ignored) {
+            // Un token invalide ne bloque pas ici; les regles de securite refuseront ensuite l'acces.
             SecurityContextHolder.clearContext();
         }
         chain.doFilter(request, response);

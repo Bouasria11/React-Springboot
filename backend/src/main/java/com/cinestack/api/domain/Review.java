@@ -14,6 +14,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "reviews")
 public class Review {
+    // Avis d'un utilisateur sur un film, base du score et des recommandations.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +34,7 @@ public class Review {
     private String comment;
 
     @Column(nullable = false)
+    // Horodatage fixe a la creation pour trier les avis recents.
     private Instant createdAt = Instant.now();
 
     protected Review() {

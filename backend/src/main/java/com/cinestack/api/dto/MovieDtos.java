@@ -9,6 +9,7 @@ public final class MovieDtos {
     private MovieDtos() {
     }
 
+    // DTO recus et renvoyes par l'API films pour ne pas exposer directement les entites JPA.
     public record MovieRequest(
             @NotBlank @Size(max = 180) String title,
             @Size(max = 2000) String synopsis,

@@ -10,6 +10,7 @@ public final class AdminDtos {
     private AdminDtos() {
     }
 
+    // DTO dedies au tableau de bord administrateur.
     public record AdminReviewResponse(
             Long id,
             Long movieId,

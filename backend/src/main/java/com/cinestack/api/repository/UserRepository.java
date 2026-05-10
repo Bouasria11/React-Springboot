@@ -4,6 +4,7 @@ import com.cinestack.api.domain.AppUser;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+// Acces aux comptes pour l'authentification et l'administration.
 public interface UserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByUsername(String username);
 

@@ -10,6 +10,7 @@ public final class AuthDtos {
     private AuthDtos() {
     }
 
+    // Contrats d'entree et sortie pour les endpoints d'authentification.
     public record RegisterRequest(
             @NotBlank @Size(min = 3, max = 80) String username,
             @NotBlank @Email String email,

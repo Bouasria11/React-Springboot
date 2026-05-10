@@ -9,6 +9,7 @@ public final class ReviewDtos {
     private ReviewDtos() {
     }
 
+    // Contrats des avis visibles cote film et moderation.
     public record ReviewRequest(
             @Min(1) @Max(5) int rating,
             @Size(max = 1200) String comment

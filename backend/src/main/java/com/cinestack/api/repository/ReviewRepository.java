@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+// Requetes utiles aux avis, au score des films et aux recommandations.
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByMovieOrderByCreatedAtDesc(Movie movie);
 
@@ -16,6 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     void deleteByUser(AppUser user);
 
+    // Moyenne calculee en base pour eviter de charger tous les avis d'un film.
     @Query("select coalesce(avg(r.rating), 0) from Review r where r.movie = :movie")
     double averageRating(Movie movie);
 

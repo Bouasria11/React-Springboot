@@ -17,6 +17,7 @@ public class UserPrincipalService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
+        // Convertit l'entite AppUser en UserDetails attendu par Spring Security.
         var user = users.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 

@@ -29,6 +29,7 @@ public class JwtService {
 
     public String createToken(UserDetails userDetails) {
         Instant now = Instant.now();
+        // Les roles sont embarques dans le token pour que le frontend puisse adapter l'interface.
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
@@ -51,6 +52,7 @@ public class JwtService {
     }
 
     private Claims claims(String token) {
+        // La signature est verifiee avant de faire confiance au contenu du token.
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -59,6 +61,7 @@ public class JwtService {
     }
 
     private byte[] normalizeSecret(String secret) {
+        // Accepte une cle secrete en Base64 ou en texte brut pour simplifier les environnements.
         try {
             return Decoders.BASE64.decode(secret);
         } catch (RuntimeException ignored) {

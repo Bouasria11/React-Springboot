@@ -37,6 +37,7 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        // L'inscription refuse les doublons avant de hasher le mot de passe.
         if (users.existsByUsername(request.username()) || users.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Username or email already used");
         }
@@ -52,12 +53,14 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+        // Delegue la verification du mot de passe au AuthenticationManager configure.
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         var user = users.findByUsername(request.username()).orElseThrow();
         return tokenFor(user);
     }
 
     private AuthResponse tokenFor(AppUser user) {
+        // La reponse donne au frontend le token et les informations utiles pour l'interface.
         var principal = userDetailsService.loadUserByUsername(user.getUsername());
         return new AuthResponse(jwtService.createToken(principal), user.getId(), user.getUsername(), user.getEmail(), user.getRoles());
     }

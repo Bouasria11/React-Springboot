@@ -42,6 +42,7 @@ public class AdminService {
     @Transactional
     public AdminUserResponse setAdmin(Long id, boolean admin, String currentUsername) {
         AppUser user = user(id);
+        // Empeche un administrateur de se retirer lui-meme le dernier acces de gestion.
         if (!admin && user.getUsername().equals(currentUsername)) {
             throw new IllegalArgumentException("You cannot remove your own administrator role");
         }
@@ -59,6 +60,7 @@ public class AdminService {
     @Transactional
     public void deleteUser(Long id, String currentUsername) {
         AppUser user = user(id);
+        // Evite qu'un administrateur supprime son propre compte depuis l'interface.
         if (user.getUsername().equals(currentUsername)) {
             throw new IllegalArgumentException("You cannot delete your own account");
         }
@@ -113,6 +115,7 @@ public class AdminService {
     @Transactional
     public void deleteGenre(Long id) {
         Genre genre = genre(id);
+        // Detache le genre des films avant suppression pour garder la table de jointure propre.
         movies.findAll().forEach(movie -> movie.getGenres().remove(genre));
         genres.delete(genre);
     }

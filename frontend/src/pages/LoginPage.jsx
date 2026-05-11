@@ -12,10 +12,12 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const navigationTimer = useRef(null);
 
+  // Nettoie le timer si l'utilisateur quitte la page avant la redirection.
   useEffect(() => () => clearTimeout(navigationTimer.current), []);
 
   async function submit(event) {
     event.preventDefault();
+    // Le meme formulaire bascule entre connexion et inscription selon le mode choisi.
     setToast(null);
     setSubmitting(true);
     try {
@@ -67,6 +69,7 @@ export default function LoginPage() {
 function AuthToast({ toast, onClose }) {
   const success = toast.type === 'success';
 
+  // Toast local a la page, utilise pour confirmer l'authentification avant la redirection.
   return (
     <div className="fixed right-4 top-4 z-50 w-[min(360px,calc(100vw-2rem))] rounded-lg border border-ink/10 bg-white p-4 shadow-soft">
       <div className="flex items-start gap-3">

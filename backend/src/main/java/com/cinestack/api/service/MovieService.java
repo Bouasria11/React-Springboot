@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MovieService {
+    // Constantes du score bayesien: elles evitent qu'un film avec peu d'avis domine trop vite.
     private static final double GLOBAL_AVERAGE = 3.5;
     private static final int MINIMUM_VOTES = 10;
 
@@ -41,6 +42,7 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public Page<MovieResponse> search(String title, String genre, LocalDate releasedAfter, Pageable pageable) {
+        // Combine les filtres optionnels sous forme de Specifications JPA.
         Specification<Movie> spec = Specification.where(titleContains(title))
                 .and(hasGenre(genre))
                 .and(releasedAfter(releasedAfter));
@@ -73,6 +75,7 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public java.util.List<MovieResponse> topRated() {
+        // Le classement public se base sur le score pondere plutot que sur la moyenne brute.
         return movies.findAll().stream()
                 .map(this::toResponse)
                 .sorted(Comparator.comparing(MovieResponse::weightedScore).reversed())
@@ -87,6 +90,7 @@ public class MovieService {
     MovieResponse toResponse(Movie movie) {
         double average = reviews.averageRating(movie);
         long count = reviews.countByMovie(movie);
+        // Score pondere inspire d'IMDb pour stabiliser les notes avec peu d'avis.
         double weighted = ((count / (double) (count + MINIMUM_VOTES)) * average)
                 + ((MINIMUM_VOTES / (double) (count + MINIMUM_VOTES)) * GLOBAL_AVERAGE);
 
@@ -109,6 +113,7 @@ public class MovieService {
     }
 
     private void apply(Movie movie, MovieRequest request) {
+        // Methode partagee par creation et modification pour garder les champs synchronises.
         movie.setTitle(request.title());
         movie.setSynopsis(request.synopsis());
         movie.setReleaseDate(request.releaseDate());
@@ -124,6 +129,7 @@ public class MovieService {
         }
         Set<Genre> resolved = new HashSet<>();
         for (String name : names) {
+            // Reutilise un genre existant, sinon le cree a la volee depuis le formulaire admin.
             resolved.add(genres.findByNameIgnoreCase(name.trim())
                     .orElseGet(() -> genres.save(new Genre(name.trim()))));
         }

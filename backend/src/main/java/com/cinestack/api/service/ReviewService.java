@@ -46,15 +46,18 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public List<MovieResponse> recommendations(String username) {
         AppUser user = user(username);
+        // Les genres preferes viennent des films notes 4/5 ou plus par l'utilisateur.
         var likedGenres = reviews.findByUserAndRatingGreaterThanEqual(user, 4).stream()
                 .flatMap(review -> review.getMovie().getGenres().stream())
                 .map(genre -> genre.getName().toLowerCase())
                 .collect(java.util.stream.Collectors.toSet());
 
         if (likedGenres.isEmpty()) {
+            // Sans historique, on propose les premiers films disponibles comme point de depart.
             return movies.findAll(PageRequest.of(0, 8)).stream().map(movieService::toResponse).toList();
         }
 
+        // Recommande les films qui partagent au moins un genre avec les favoris de l'utilisateur.
         return movies.findAll().stream()
                 .filter(movie -> movie.getGenres().stream().anyMatch(genre -> likedGenres.contains(genre.getName().toLowerCase())))
                 .map(movieService::toResponse)

@@ -5,6 +5,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 
 const emptyMovie = { title: '', synopsis: '', releaseDate: '', posterUrl: '', trailerUrl: '', genres: '' };
 
+// Tableau de bord d'administration: films, utilisateurs, genres et moderation des avis.
 export default function AdminPage() {
   const { user, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('movies');
@@ -28,6 +29,7 @@ export default function AdminPage() {
   }
 
   async function loadAll() {
+    // Charge les donnees en parallele pour garder l'interface admin reactive.
     await Promise.all([loadMovies(), loadUsers(), loadGenres(), loadReviews()]);
   }
 
@@ -52,6 +54,7 @@ export default function AdminPage() {
   }
 
   async function run(action, success) {
+    // Encapsule les actions admin pour afficher un message uniforme en succes ou erreur.
     try {
       setMessage('');
       await action();
@@ -63,6 +66,7 @@ export default function AdminPage() {
 
   async function saveMovie(event) {
     event.preventDefault();
+    // L'API attend un tableau de genres; le formulaire les saisit sous forme de liste texte.
     const payload = { ...form, genres: form.genres.split(',').map((value) => value.trim()).filter(Boolean) };
     await run(async () => {
       if (editingId) {

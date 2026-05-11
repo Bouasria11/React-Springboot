@@ -12,6 +12,7 @@ export default function MovieDetailPage() {
   const [form, setForm] = useState({ rating: 5, comment: '' });
 
   async function load() {
+    // Recupere le film et ses avis ensemble pour afficher une page coherente apres publication.
     const [movieResponse, reviewResponse] = await Promise.all([
       api.get(`/api/movies/${id}`),
       api.get(`/api/movies/${id}/reviews`),
@@ -26,6 +27,7 @@ export default function MovieDetailPage() {
 
   async function submitReview(event) {
     event.preventDefault();
+    // Apres l'envoi, on recharge les donnees pour mettre a jour le score calcule cote backend.
     await api.post(`/api/movies/${id}/reviews`, form);
     setForm({ rating: 5, comment: '' });
     load();

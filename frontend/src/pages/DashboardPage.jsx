@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
+    // Construit une requete paginee en n'envoyant que les filtres renseignes.
     const params = new URLSearchParams({ page, size: 8, sort: 'releaseDate,desc' });
     Object.entries(searchFilters).forEach(([key, value]) => value && params.set(key, value));
     api.get(`/api/movies?${params}`).then(({ data }) => {
@@ -29,12 +30,14 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (user) {
+      // Les recommandations sont privees car elles utilisent l'historique d'avis du compte.
       api.get('/api/recommendations').then(({ data }) => setRecommended(data)).catch(() => setRecommended([]));
     }
   }, [user]);
 
   function submitSearch(event) {
     event.preventDefault();
+    // Separe les champs en cours de saisie des filtres effectivement appliques.
     setPage(0);
     setSearchFilters(filters);
   }

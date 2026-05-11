@@ -46,6 +46,7 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-6">
+        {/* Les pages restent dans le layout commun pour garder la navigation persistante. */}
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/movies/:id" element={<MovieDetailPage />} />
@@ -63,5 +64,6 @@ export default function App() {
 }
 
 function navClass({ isActive }) {
+  // React Router passe isActive pour synchroniser le style avec l'URL courante.
   return `inline-flex h-10 items-center gap-2 rounded px-3 text-sm font-semibold ${isActive ? 'bg-ink text-linen' : 'border border-ink/15 text-ink'}`;
 }

@@ -8,6 +8,7 @@ import './styles.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+      {/* Le provider rend la session disponible a toutes les routes. */}
       <AuthProvider>
         <App />
       </AuthProvider>
